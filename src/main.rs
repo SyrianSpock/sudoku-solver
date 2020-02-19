@@ -3,14 +3,45 @@ use std::fmt;
 
 #[derive(Copy, Clone)]
 struct Coordinate {
-    row: u8,
-    column: u8,
+    row: usize,
+    column: usize,
 }
 
 impl fmt::Debug for Coordinate {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "(row: {}, column: {})", self.row, self.column)
     }
+}
+
+fn possible(grid: Grid, position: Coordinate, number: u8) -> bool {
+    for i in 0..9 {
+        if grid.value[position.column as usize][i as usize] == number {
+            println!("A");
+            return false;
+        }
+    }
+    for i in 0..9 {
+        if grid.value[i as usize][position.row as usize] == number {
+            println!("B");
+            return false;
+        }
+    }
+    let row0: usize = ((position.row / 3) as usize * 3) as usize;
+    let col0: usize = ((position.column / 3) as usize * 3) as usize;
+    for i in 0..3 {
+        for j in 0..3 {
+            if grid.value[row0 + i][col0 + j] == number {
+                let c = Coordinate {
+                    row: row0 + i,
+                    column: col0 + j,
+                };
+                grid.show(c);
+                println!("{:?}", c);
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 struct Grid {
@@ -51,28 +82,31 @@ impl Grid {
     }
 
     fn show(&self, position: Coordinate) {
-        for i in 0..9 {
+        println!("-------------------------------------");
+        for row in 0..9 {
             let mut line = "".to_string();
-            for j in 0..9 {
-                if j == 0 {
+            for col in 0..9 {
+                if col == 0 {
                     line.push_str("| ");
                 }
 
-                if position.row == i && position.column == j {
+                if position.row == row && position.column == col {
                     line.push_str("*");
                 } else {
                     line.push_str(Box::leak(
-                        format!("{}", self.value[i as usize][j as usize] as usize).into_boxed_str(),
+                        format!("{}", self.value[row as usize][col as usize] as usize)
+                            .into_boxed_str(),
                     ));
                 }
 
                 line.push_str(" |");
-                if j != 8 {
+                if col != 8 {
                     line.push_str(" ");
                 }
             }
             println!("{}", line);
         }
+        println!("-------------------------------------");
     }
 }
 
@@ -94,4 +128,10 @@ fn main() {
     let c = Coordinate { row: 0, column: 3 };
     println!("The grid is shown {:?} position as *:", c);
     input.show(c);
+    println!(
+        "{} at {:?} is possible? {}",
+        n,
+        &c,
+        possible(input, c.clone(), n)
+    );
 }
