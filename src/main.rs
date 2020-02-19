@@ -16,13 +16,11 @@ impl fmt::Debug for Coordinate {
 fn possible(grid: Grid, position: Coordinate, number: u8) -> bool {
     for i in 0..9 {
         if grid.value[position.column as usize][i as usize] == number {
-            println!("A");
             return false;
         }
     }
     for i in 0..9 {
         if grid.value[i as usize][position.row as usize] == number {
-            println!("B");
             return false;
         }
     }
@@ -31,12 +29,6 @@ fn possible(grid: Grid, position: Coordinate, number: u8) -> bool {
     for i in 0..3 {
         for j in 0..3 {
             if grid.value[row0 + i][col0 + j] == number {
-                let c = Coordinate {
-                    row: row0 + i,
-                    column: col0 + j,
-                };
-                grid.show(c);
-                println!("{:?}", c);
                 return false;
             }
         }
