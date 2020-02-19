@@ -1,3 +1,18 @@
+#![feature(nll)]
+use std::fmt;
+
+#[derive(Copy, Clone)]
+struct Coordinate {
+    row: u8,
+    column: u8,
+}
+
+impl fmt::Debug for Coordinate {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "(row: {}, column: {})", self.row, self.column)
+    }
+}
+
 struct Grid {
     value: [[u8; 9]; 9],
 }
@@ -29,10 +44,34 @@ impl Grid {
     }
 
     fn display(&self) {
-        println!("The grid is:");
+        self.show(Coordinate {
+            row: 10,
+            column: 10,
+        });
+    }
 
+    fn show(&self, position: Coordinate) {
         for i in 0..9 {
-            println!("{:?}", self.value[i]);
+            let mut line = "".to_string();
+            for j in 0..9 {
+                if j == 0 {
+                    line.push_str("| ");
+                }
+
+                if position.row == i && position.column == j {
+                    line.push_str("*");
+                } else {
+                    line.push_str(Box::leak(
+                        format!("{}", self.value[i as usize][j as usize] as usize).into_boxed_str(),
+                    ));
+                }
+
+                line.push_str(" |");
+                if j != 8 {
+                    line.push_str(" ");
+                }
+            }
+            println!("{}", line);
         }
     }
 }
@@ -51,4 +90,8 @@ fn main() {
     );
 
     input.display();
+    let n = 9;
+    let c = Coordinate { row: 0, column: 3 };
+    println!("The grid is shown {:?} position as *:", c);
+    input.show(c);
 }
