@@ -107,8 +107,8 @@ impl Grid {
     }
 }
 
-fn main() {
-    let input: Grid = Grid::new(
+fn some_input() -> Grid {
+    return Grid::new(
         [5, 3, 0, 0, 7, 0, 0, 0, 0],
         [6, 0, 0, 1, 9, 5, 0, 0, 0],
         [0, 9, 8, 0, 0, 0, 0, 6, 0],
@@ -119,7 +119,63 @@ fn main() {
         [0, 0, 0, 4, 1, 9, 0, 0, 5],
         [0, 0, 0, 0, 8, 0, 0, 7, 9],
     );
+}
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn possible_finds_impossible_numbers() {
+        assert!(!possible(
+            some_input(),
+            Coordinate { row: 0, column: 3 }.clone(),
+            9
+        ));
+        assert!(!possible(
+            some_input(),
+            Coordinate { row: 0, column: 3 }.clone(),
+            7
+        ));
+        assert!(!possible(
+            some_input(),
+            Coordinate { row: 0, column: 3 }.clone(),
+            5
+        ));
+        assert!(!possible(
+            some_input(),
+            Coordinate { row: 0, column: 3 }.clone(),
+            3
+        ));
+        assert!(!possible(
+            some_input(),
+            Coordinate { row: 0, column: 3 }.clone(),
+            1
+        ));
+    }
+
+    #[test]
+    fn possible_finds_possible_numbers() {
+        assert!(possible(
+            some_input(),
+            Coordinate { row: 0, column: 3 }.clone(),
+            2
+        ));
+        assert!(possible(
+            some_input(),
+            Coordinate { row: 0, column: 3 }.clone(),
+            6
+        ));
+        assert!(possible(
+            some_input(),
+            Coordinate { row: 0, column: 3 }.clone(),
+            8
+        ));
+    }
+}
+
+fn main() {
+    let input = some_input();
     input.display();
     let n = 9;
     let c = Coordinate { row: 0, column: 3 };
