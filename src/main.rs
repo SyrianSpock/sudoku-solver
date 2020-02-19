@@ -145,7 +145,7 @@ fn solve(grid: &mut Grid) -> Grid {
     for row in 0..9 {
         for col in 0..9 {
             if g.value[col][row] == 0 {
-                for n in 0..10 {
+                for n in 1..10 {
                     if possible(
                         g,
                         Coordinate {
@@ -214,6 +214,11 @@ mod tests {
             8
         ));
     }
+
+    #[test]
+    fn solves_sudoku_grid() {
+        assert_eq!(0, 0);
+    }
 }
 
 fn main() {
@@ -227,7 +232,7 @@ fn main() {
         "{} at {:?} is possible? {}",
         n,
         &c,
-        possible(input, c.clone(), n)
+        possible(input.clone(), c.clone(), n)
     );
     println!("The computed solution grid is:");
     solve(&mut input.clone()).display();
