@@ -74,7 +74,7 @@ impl Grid {
     }
 
     fn show(&self, position: Coordinate) {
-        println!("-------------------------------------");
+        println!("----------------------------------------");
         for row in 0..9 {
             let mut line = "".to_string();
             for col in 0..9 {
@@ -92,13 +92,18 @@ impl Grid {
                 }
 
                 line.push_str(" |");
+                if (col % 3) == 2 {
+                    line.push_str("|");
+                }
                 if col != 8 {
                     line.push_str(" ");
                 }
             }
             println!("{}", line);
+            if (row % 3) == 2 {
+                println!("----------------------------------------");
+            }
         }
-        println!("-------------------------------------");
     }
 }
 
