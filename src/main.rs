@@ -39,6 +39,7 @@ fn possible(grid: Grid, position: Coordinate, number: u8) -> bool {
     return true;
 }
 
+#[derive(Copy, Clone)]
 struct Grid {
     value: [[u8; 9]; 9],
 }
@@ -124,6 +125,44 @@ fn some_input() -> Grid {
     );
 }
 
+// solution of the above grid
+fn some_solution() -> Grid {
+    return Grid::new(
+        [5, 3, 4, 6, 7, 8, 9, 1, 2],
+        [6, 7, 2, 1, 9, 5, 3, 4, 8],
+        [1, 9, 8, 3, 4, 2, 5, 6, 7],
+        [8, 5, 9, 7, 6, 1, 4, 2, 3],
+        [4, 2, 6, 8, 5, 3, 7, 9, 1],
+        [7, 1, 3, 9, 2, 4, 8, 5, 6],
+        [9, 6, 1, 5, 3, 7, 2, 8, 4],
+        [2, 8, 7, 4, 1, 9, 6, 3, 5],
+        [3, 4, 5, 2, 8, 6, 1, 7, 9],
+    );
+}
+
+fn solve(grid: &mut Grid) -> Grid {
+    let mut g = grid.clone();
+    for row in 0..9 {
+        for col in 0..9 {
+            if g.value[col][row] == 0 {
+                for n in 0..10 {
+                    if possible(
+                        g,
+                        Coordinate {
+                            row: row,
+                            column: col,
+                        },
+                        n,
+                    ) {
+                        g.value[col][row] = n;
+                    }
+                }
+            }
+        }
+    }
+    g
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -190,4 +229,8 @@ fn main() {
         &c,
         possible(input, c.clone(), n)
     );
+    println!("The computed solution grid is:");
+    solve(&mut input.clone()).display();
+    println!("The actual solution grid is:");
+    some_solution().display();
 }
