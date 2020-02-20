@@ -14,16 +14,19 @@ impl fmt::Debug for Coordinate {
 }
 
 fn possible(grid: Grid, position: Coordinate, number: u8) -> bool {
+    // Check row
     for i in 0..9 {
         if grid.value[position.column as usize][i as usize] == number {
             return false;
         }
     }
+    // Check column
     for i in 0..9 {
         if grid.value[i as usize][position.row as usize] == number {
             return false;
         }
     }
+    // Check box
     let row0: usize = ((position.row / 3) as usize * 3) as usize;
     let col0: usize = ((position.column / 3) as usize * 3) as usize;
     for i in 0..3 {
